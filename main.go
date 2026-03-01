@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	db "sheldon/internal/database"
 	"strconv"
 )
 
@@ -38,7 +39,7 @@ func handleRecordCommand() {
 		return
 	}
 
-	err = RecordCommand(command, cwd, exitcode)
+	err = db.RecordCommand(command, cwd, exitcode)
 	if err != nil {
 		fmt.Println("Error:", err)
 	}
@@ -52,7 +53,7 @@ func handleSearchCommand() {
 
 	query := os.Args[2]
 
-	results, err := SearchCommand(query)
+	results, err := db.SearchCommand(query)
 	if err != nil {
 		fmt.Println("Error:", err)
 	}
