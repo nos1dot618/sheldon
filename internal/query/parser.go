@@ -1,9 +1,10 @@
 package query
 
-import "strings"
+import (
+	"strings"
+)
 
-func Parse(input string) ([]Node, error) {
-	tokens := Tokenize(input)
+func Parse(tokens []string) ([]Node, error) {
 	var nodes []Node
 
 	for _, token := range tokens {

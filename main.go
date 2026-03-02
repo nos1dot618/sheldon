@@ -51,9 +51,7 @@ func handleSearchCommand() {
 		return
 	}
 
-	query := os.Args[2]
-
-	results, err := db.SearchCommand(query)
+	results, err := db.SearchCommand(os.Args[2:])
 	if err != nil {
 		fmt.Println("Error:", err)
 	}

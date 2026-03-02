@@ -40,7 +40,7 @@ func RecordCommand(command string, cwd string, exitcode int) error {
 
 // TODO: Only return a range of results.
 // TODO: Support more expressive queries.
-func SearchCommand(query string) ([]HistoricCommand, error) {
+func SearchCommand(filters []string) ([]HistoricCommand, error) {
 	db, err := openDb()
 	if err != nil {
 		return nil, err
@@ -52,7 +52,7 @@ func SearchCommand(query string) ([]HistoricCommand, error) {
 		return nil, err
 	}
 
-	nodes, err := q.Parse(query)
+	nodes, err := q.Parse(filters)
 	if err != nil {
 		return nil, err
 	}

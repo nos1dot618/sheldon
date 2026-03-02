@@ -31,13 +31,15 @@ Example:
 PowerShell:
 
 ```powershell
-.\sheldon.exe record "Get-ChildItem" "C:\Users\Nosferatu" 0
+.\sheldon.exe search command~get exitcode=0 timestamp<today
 ```
 
 ```console
-> .\sheldon.exe search "Get"
+> .\sheldon.exe search "command~get exitcode=0 timestamp>`"yesterday`""
 {2 Get-ChildItem C:\Users\Nosferatu 0 2026-03-01 11:54:29 +0000 UTC}
 ```
+
+![Search Demo](./resources/pictures/search_demo.png)
 
 ## References
 
