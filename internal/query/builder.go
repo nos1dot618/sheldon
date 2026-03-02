@@ -2,17 +2,16 @@ package query
 
 import (
 	"fmt"
-	db "sheldon/internal/database"
 	time "sheldon/internal/timeutil"
 	"strconv"
 	"strings"
 )
 
-func BuildQuery(nodes []Node, schema db.Schema) (string, []interface{}, error) {
+func BuildQuery(nodes []Node, schema Schema) (string, []any, error) {
 	var query strings.Builder
 	query.WriteString("SELECT * FROM History WHERE 1=1")
 
-	var args []interface{}
+	var args []any
 
 	for _, node := range nodes {
 		switch derived := node.(type) {
@@ -34,11 +33,11 @@ func BuildQuery(nodes []Node, schema db.Schema) (string, []interface{}, error) {
 	return query.String(), args, nil
 }
 
-func buildFilterNodeQuery(node FilterNode, schema db.Schema) (string, interface{}, error) {
+func buildFilterNodeQuery(node FilterNode, schema Schema) (string, any, error) {
 	column := schema[node.Field]
 
 	switch column.Type {
-	case db.TypeText:
+	case TypeText:
 		switch node.Op {
 		case OpApprox:
 			return column.Name + " LIKE ?", "%" + node.Value + "%", nil
@@ -48,7 +47,7 @@ func buildFilterNodeQuery(node FilterNode, schema db.Schema) (string, interface{
 			return "", nil, fmt.Errorf("Operator '%s' is not allowed for text fields like '%s'.", node.Op, column.Name)
 		}
 
-	case db.TypeInt:
+	case TypeInt:
 		switch node.Op {
 		case OpEquals, OpLessThan, OpGreaterThan:
 			value, err := strconv.Atoi(node.Value)
@@ -61,7 +60,7 @@ func buildFilterNodeQuery(node FilterNode, schema db.Schema) (string, interface{
 				node.Op, column.Name)
 		}
 
-	case db.TypeReal:
+	case TypeReal:
 		switch node.Op {
 		case OpEquals, OpLessThan, OpGreaterThan:
 			value, err := strconv.ParseFloat(node.Value, 64)
@@ -74,7 +73,7 @@ func buildFilterNodeQuery(node FilterNode, schema db.Schema) (string, interface{
 				node.Op, column.Name)
 		}
 
-	case db.TypeTime:
+	case TypeTime:
 		switch node.Op {
 		case OpEquals, OpLessThan, OpGreaterThan:
 			value, err := time.ParseTime(node.Value)
